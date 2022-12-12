@@ -18,13 +18,10 @@ if (isset($_POST['submit'])) {
                 $_SESSION['isLoggedIn'] = true;
                 $_SESSION['id'] = $row['id'];
                 header("Location: customer.php");
-
             } else if ($row['level'] == "admin") {
-
                 $_SESSION['isLoggedIn'] = true;
                 $_SESSION['id'] = $row['id'];
                 header("Location: admin.php");
-
             } else {
                 header("Location: login.php?error=failed");
             }
