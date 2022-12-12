@@ -32,6 +32,7 @@ if (isset($_POST['submit'])) {
             header("Location: login.php?error=Incorrect Password");
         }
     } else {
+
         header("Location: login.php?error=No user found with that username");
     }
 
