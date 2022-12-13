@@ -90,17 +90,61 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 <div class="container pt-4">
     <div class="row">
 
-        <div class="col-lg-2 col-md-3">
-            <div class="list-group list-group-borderless">
-                <a href="admin.php" class="list-group-item list-group-item-action ">
-                    Manage Products
-                </a>
+<!--        <div class="col-lg-2 col-md-3">-->
+<!--            <div class="list-group list-group-borderless">-->
+<!--                <a href="admin.php" class="list-group-item list-group-item-action ">-->
+<!--                    Manage Products-->
+<!--                </a>-->
+<!---->
+<!--                <a href="manage-customer.php" class="list-group-item list-group-item-action ">-->
+<!--                    Manage Customers-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
 
-                <a href="manage-customer.php" class="list-group-item list-group-item-action ">
-                    Manage Customers
+
+        <div class="col-md-12 col-lg-12 mt-2">
+            <div>
+                <a class="btn btn-success d-block d-sm-inline-block"
+                   id="btn-show-user-modal"
+                   data-bs-toggle="modal" data-bs-target="#addProduct">
+                    Add Products
                 </a>
             </div>
-        </div>
+
+            <table class="table" id="myTable">
+                <thead>
+                    <th>Product Image</th>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Product Price</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                <?php
+
+                $sql = "SELECT * FROM products";
+                $result = mysqli_query($con, $sql);
+                if (mysqli_num_rows($result) > 0){
+                while($product = mysqli_fetch_assoc($result)){
+                ?>
+                    <tr>
+                        <td><img width="50px" src="<?php echo $product['product_image']?>"></td>
+                        <td><?php echo $product['id']?></td>
+                        <td><?php echo $product['product_name']?></td>
+                        <td><?php echo $product['product_price']?></td>
+                        <td><div class="btn-group">
+                                <a class="btn btn-primary">Edit</a>
+                                <a class="btn btn-danger" href="delete-product.php?id=<?php echo $product['id']?>">Delete</a>
+                            </div></td>
+                    </tr>
+                <?php
+                 }
+                }
+                ?>
+                </tbody>
+            </table>
+    </div>
 
 
         <div class="col-md-9 col-lg-10 mt-2">
@@ -108,7 +152,7 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 <a class="btn btn-success d-block d-sm-inline-block"
                    id="btn-show-user-modal"
                    data-bs-toggle="modal" data-bs-target="#addProduct">
-                    Add Products
+                    Add User
                 </a>
             </div>
 
