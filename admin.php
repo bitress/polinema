@@ -72,6 +72,9 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="admin.php">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="logout.php">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -115,6 +118,7 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                     <th>Product ID</th>
                     <th>Product Name</th>
                     <th>Product Price</th>
+                    <th>Actions</th>
                 </thead>
                 <tbody>
                 <?php
@@ -129,6 +133,10 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                         <td><?php echo $product['id']?></td>
                         <td><?php echo $product['product_name']?></td>
                         <td><?php echo $product['product_price']?></td>
+                        <td><div class="btn-group">
+                                <a class="btn btn-primary">Edit</a>
+                                <a class="btn btn-danger">Delete</a>
+                            </div></td>
                     </tr>
                 <?php
                  }
@@ -149,7 +157,6 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 </div>
                 <form enctype="multipart/form-data" action="admin.php" method="post">
                 <div class="modal-body">
-
                         <div class="mb-3">
                             <label>Product Image</label>
                             <input type="file" name="product_image" class="form-control">

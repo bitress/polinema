@@ -61,6 +61,10 @@ if (isset($_POST['addtocart'])){
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="modal" data-bs-target="#myCart" href="#">My Cart</a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="logout.php">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
