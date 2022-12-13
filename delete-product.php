@@ -12,7 +12,6 @@ if (isset($_POST['id'])){
     $sql = "DELETE FROM cart WHERE product_id = '$id'";
     mysqli_query($con, $sql);
 
-
     header("Location: admin.php");
 
 }
