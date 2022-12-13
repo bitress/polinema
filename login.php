@@ -21,6 +21,7 @@ if (isset($_POST['submit'])) {
                 header("Location: customer.php");
             } else if ($row['level'] == "admin") {
                 $_SESSION['isLoggedIn'] = true;
+                $_SESSION['admin'] = true;
                 $_SESSION['id'] = $row['id'];
                 header("Location: admin.php");
             } else {
