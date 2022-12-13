@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
                 <div class="text-center mt-5 text-muted">
-                    Copyright &copy; 2022 &mdash; FessItUp
+                    Copyright &copy; 2022 &mdash; ShopOn-it
                 </div>
             </div>
         </div>

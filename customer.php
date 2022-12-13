@@ -81,7 +81,6 @@ if (isset($_POST['addtocart'])){
     <div class="row">
 
         <?php
-
             $sql = "SELECT * FROM products";
             $result = mysqli_query($con, $sql);
             if (mysqli_num_rows($result) > 0){
