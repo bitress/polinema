@@ -2,9 +2,9 @@
 
 include_once 'connection.php';
 
-if (isset($_POST['id'])){
+if (isset($_GET['id'])){
 
-    $id = $_POST['id'];
+    $id = $_GET['id'];
 
     $sql = "DELETE FROM products WHERE id = '$id'";
     mysqli_query($con, $sql);
