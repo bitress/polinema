@@ -11,7 +11,7 @@ if (isset($_SESSION['isLoggedIn'])){
     $row = mysqli_fetch_assoc($result);
 
 } else {
-    header("Location: login.php");
+    header("Location: index.php");
 }
 
 

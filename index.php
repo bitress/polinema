@@ -25,14 +25,14 @@ if (isset($_POST['submit'])) {
                 $_SESSION['id'] = $row['id'];
                 header("Location: admin.php");
             } else {
-                header("Location: login.php?error=failed");
+                header("Location: index.php?error=failed");
             }
         } else {
-            header("Location: login.php?error=Incorrect Password");
+            header("Location: index.php?error=Incorrect Password");
         }
     } else {
 
-        header("Location: login.php?error=No user found with that username");
+        header("Location: index.php?error=No user found with that username");
     }
 
 }
@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
                         </div>
                         <?php } ?>
 
-                        <form method="POST" action="login.php">
+                        <form method="POST" action="index.php">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="username">Username</label>
                                 <input id="username" type="text" class="form-control" name="username" value="" required autofocus>
