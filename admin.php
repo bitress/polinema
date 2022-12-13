@@ -135,7 +135,7 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                         <td><?php echo $product['product_price']?></td>
                         <td><div class="btn-group">
                                 <a class="btn btn-primary">Edit</a>
-                                <a class="btn btn-danger">Delete</a>
+                                <a class="btn btn-danger" href="delete-product.php?id=<?php echo $product['id']?>">Delete</a>
                             </div></td>
                     </tr>
                 <?php
