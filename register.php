@@ -1,3 +1,30 @@
+<?php
+
+    include_once 'connection.php';
+
+    if (isset($_POST['submit'])){
+
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $repeat_password = $_POST['repeat_password'];
+
+        $sql = "INSERT INTO `users` (username, password) VALUES ('$username', '$repeat_password')";
+        $stmt = mysqli_query($con, $sql);
+        if ($stmt){
+
+            $id = mysqli_insert_id($con);
+
+            $sql = "INSERT INTO user_details (user_id) VALUES ('$id')";
+            mysqli_query($con, $sql);
+
+            // add success here
+
+        }
+
+
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
