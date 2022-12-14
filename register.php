@@ -8,7 +8,7 @@
         $password = $_POST['password'];
         $repeat_password = $_POST['repeat_password'];
 
-        $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$repeat_password')";
+        $sql = "INSERT INTO `users` (`username`, `password`, `level`) VALUES ('$username', '$repeat_password', 'customer')";
         $stmt = mysqli_query($con, $sql);
         if ($stmt === true){
 
