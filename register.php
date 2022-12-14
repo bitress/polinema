@@ -8,21 +8,21 @@
         $password = $_POST['password'];
         $repeat_password = $_POST['repeat_password'];
 
-        $sql = "INSERT INTO `users` (`username`, `password`, `level`, `date_created`) VALUES ('$username', '$repeat_password', 'customer', now())";
+        $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$repeat_password')";
         $stmt = mysqli_query($con, $sql);
         if ($stmt === true){
 
-//            $id = mysqli_insert_id($con);
-//
-//            $sql = "INSERT INTO `user_details` (`user_id`) VALUES ('$id')";
-//            $stmt = mysqli_query($con, $sql);
-//            if ($stmt === true) {
-                // add success here
+            $id = mysqli_insert_id($con);
+
+            $sql = "INSERT INTO `user_details` (`user_id`) VALUES ('$id')";
+            $stmt = mysqli_query($con, $sql);
+            if ($stmt === true) {
+//                 add success here
                 echo "success";
             } else {
                 echo mysqli_error($con);
             }
-//        }
+        }
 
 
     }
@@ -56,7 +56,7 @@
                         <form method="POST" action="register.php">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="username">Create your username</label>
-                                <input id="username" type="text" class="form-control" name="email" value="" required autofocus>
+                                <input id="username" type="text" class="form-control" name="username" value="" required autofocus>
                             </div>
 
                             <div class="mb-3">
