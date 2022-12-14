@@ -53,7 +53,7 @@
                         <form method="POST" action="register.php">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="username">Create your username</label>
-                                <input id="username" type="email" class="form-control" name="email" value="" required autofocus>
+                                <input id="username" type="text" class="form-control" name="email" value="" required autofocus>
                             </div>
 
                             <div class="mb-3">
