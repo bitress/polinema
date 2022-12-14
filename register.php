@@ -8,17 +8,20 @@
         $password = $_POST['password'];
         $repeat_password = $_POST['repeat_password'];
 
-        $sql = "INSERT INTO `users` (username, password) VALUES ('$username', '$repeat_password')";
+        $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$repeat_password')";
         $stmt = mysqli_query($con, $sql);
-        if ($stmt){
+        if ($stmt === true){
 
             $id = mysqli_insert_id($con);
 
-            $sql = "INSERT INTO user_details (user_id) VALUES ('$id')";
-            mysqli_query($con, $sql);
-
-            // add success here
-
+            $sql = "INSERT INTO user_details (`user_id`) VALUES ('$id')";
+            $stmt = mysqli_query($con, $sql);
+            if ($stmt === true) {
+                // add success here
+                echo "success";
+            } else {
+                echo mysqli_error($con);
+            }
         }
 
 
