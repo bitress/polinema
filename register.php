@@ -17,7 +17,7 @@
             $sql = "INSERT INTO `user_details` (`user_id`) VALUES ('$id')";
             $stmt = mysqli_query($con, $sql);
             if ($stmt === true) {
-//                 add success here
+                // add success here
                 echo "success";
             } else {
                 echo mysqli_error($con);
@@ -79,7 +79,7 @@
                             </p>
 
                             <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ms-auto">
+                                <button type="submit" name="submit" class="btn btn-primary ms-auto">
                                     Register
                                 </button>
                             </div>
