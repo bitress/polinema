@@ -12,17 +12,17 @@
         $stmt = mysqli_query($con, $sql);
         if ($stmt === true){
 
-            $id = mysqli_insert_id($con);
-
-            $sql = "INSERT INTO user_details (`user_id`) VALUES ('$id')";
-            $stmt = mysqli_query($con, $sql);
-            if ($stmt === true) {
+//            $id = mysqli_insert_id($con);
+//
+//            $sql = "INSERT INTO `user_details` (`user_id`) VALUES ('$id')";
+//            $stmt = mysqli_query($con, $sql);
+//            if ($stmt === true) {
                 // add success here
                 echo "success";
             } else {
                 echo mysqli_error($con);
             }
-        }
+//        }
 
 
     }
