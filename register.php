@@ -19,7 +19,7 @@
             $stmt = mysqli_query($con, $sql);
             if ($stmt === true) {
                 // add success here
-                echo "success";
+                header("Location: index.php?success=You may now login");
             } else {
                 echo mysqli_error($con);
             }

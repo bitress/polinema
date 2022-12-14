@@ -67,6 +67,16 @@ if (isset($_POST['submit'])) {
                         </div>
                         <?php } ?>
 
+                        <?php
+                        if (isset($_GET['success'])){
+                            $success = $_GET['success'];
+                        ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Nice!</strong> <?= $success ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <?php } ?>
+
                         <form method="POST" action="index.php">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="username">Username</label>
