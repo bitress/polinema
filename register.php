@@ -1,6 +1,6 @@
 <?php
 
-    include_once 'connection.php';
+include_once 'includes/connection.php';
 
     if (isset($_POST['submit'])){
 
@@ -9,7 +9,11 @@
         $repeat_password = $_POST['repeat_password'];
         $pass = md5($repeat_password);
 
-        $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$pass')";
+	if($username == ""){
+		header("Location: register.php?error=Please enter your username");
+return false;
+		}    
+    $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$pass')";
         $stmt = mysqli_query($con, $sql);
         if ($stmt === true){
 

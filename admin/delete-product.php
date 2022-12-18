@@ -1,6 +1,6 @@
 <?php
 
-include_once 'connection.php';
+include_once '../includes/connection.php';
 
 if (isset($_GET['id'])){
 
@@ -12,6 +12,6 @@ if (isset($_GET['id'])){
     $sql = "DELETE FROM cart WHERE product_id = '$id'";
     mysqli_query($con, $sql);
 
-    header("Location: admin.php");
+    header("Location: index.php");
 
 }

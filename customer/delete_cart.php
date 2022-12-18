@@ -1,5 +1,5 @@
 <?php
-include_once 'connection.php';
+include_once '../includes/connection.php';
 
 if (isset($_GET['product_id'])){
 
@@ -10,7 +10,7 @@ if (isset($_GET['product_id'])){
     mysqli_query($con, $sql);
 
 
-    header("Location: customer.php");
+    header("Location: index.php");
 
 
 }

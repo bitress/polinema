@@ -1,6 +1,14 @@
 <?php
 
-include_once 'connection.php';
+include_once 'includes/connection.php';
+
+if (isset($_SESSION['isLoggedIn'])){
+    if (isset($_SESSION['admin'])) {
+        header("Location: admin/index.php");
+    } else {
+        header("Location: customer/index.php");
+    }
+}
 
 if (isset($_POST['submit'])) {
 
@@ -18,12 +26,12 @@ if (isset($_POST['submit'])) {
                 $_SESSION['isLoggedIn'] = true;
                 $_SESSION['id'] = $row['id'];
 
-                header("Location: customer.php");
+                header("Location: customer/index.php");
             } else if ($row['level'] == "admin") {
                 $_SESSION['isLoggedIn'] = true;
                 $_SESSION['admin'] = true;
                 $_SESSION['id'] = $row['id'];
-                header("Location: admin.php");
+                header("Location: admin/index.php");
             } else {
                 header("Location: index.php?error=failed");
             }

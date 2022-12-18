@@ -1,6 +1,6 @@
 <?php
 
-include_once 'connection.php';
+include_once '../includes/connection.php';
 
 if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
@@ -18,6 +18,7 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
         $product_name = $_POST['product_name'];
         $product_price = $_POST['product_price'];
+        $category = $_POST['category'];
 
         if(isset($_FILES['product_image'])){
             $error = "";
@@ -28,7 +29,7 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
             $array = explode('.', $_FILES['product_image']['name']);
             $file_ext=strtolower(end($array));
 
-            $extensions= array("jpeg","jpg","png");
+            $extensions= array("jpeg","jpg","png","webp");
 
             if(in_array($file_ext,$extensions)=== false){
                 $error ="Please choose a JPEG or PNG file.";
@@ -36,11 +37,11 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
             if($error == "") {
                 $product_image = "products/".$file_name;
-                move_uploaded_file($file_tmp,"products/".$file_name);
+                move_uploaded_file($file_tmp, "../products/".$file_name);
 
-                $sql = "INSERT INTO products (product_name, product_price, product_image) VALUES ('$product_name', '$product_price', '$product_image')";
+                $sql = "INSERT INTO products (product_name, product_price, category, product_image) VALUES ('$product_name', '$product_price', '$category', '$product_image')";
                 mysqli_query($con, $sql);
-                header("Location: admin.php");
+                header("Location: index.php");
 
             }else{
                 print_r($error);
@@ -63,27 +64,29 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
 <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="admin.php">ShopOn-it</a>
+        <a class="navbar-brand" href="index.php">ShopOn-it</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="admin.php">Home</a>
+                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="logout.php">Logout</a>
+                    <a class="nav-link" aria-current="page" href="../logout.php">Logout</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<header >
-    <div class="container-fluid text-sm-center p-5 bg-light">
-        <h1 class="display-6">Welcome admin</h1>
-        <p class="lead">Have fun managing!</p>
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Welcome admin</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Have fun managing!</p>
+        </div>
     </div>
 </header>
 
@@ -103,7 +106,9 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 <!--        </div>-->
 
 
-        <div class="col-md-12 col-lg-12 mt-2">
+        <div class="col-md-6 col-lg-6">
+            <h3>Manage Products</h3>
+
             <div>
                 <a class="btn btn-success d-block d-sm-inline-block"
                    id="btn-show-user-modal"
@@ -111,27 +116,29 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                     Add Products
                 </a>
             </div>
-
+            <div class="table-responsive">
             <table class="table" id="myTable">
                 <thead>
                     <th>Product Image</th>
                     <th>Product ID</th>
                     <th>Product Name</th>
+                    <th>Product Category</th>
                     <th>Product Price</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
                 <?php
 
-                $sql = "SELECT * FROM products";
+                $sql = "SELECT * FROM products LEFT JOIN category ON category.category_id = products.category";
                 $result = mysqli_query($con, $sql);
                 if (mysqli_num_rows($result) > 0){
                 while($product = mysqli_fetch_assoc($result)){
                 ?>
                     <tr>
-                        <td><img width="50px" src="<?php echo $product['product_image']?>"></td>
+                        <td><img width="50px" src="<?php echo WEBSITE_DOMAIN. $product['product_image']?>"></td>
                         <td><?php echo $product['id']?></td>
                         <td><?php echo $product['product_name']?></td>
+                        <td><?php echo $product['category_name']?></td>
                         <td><?php echo $product['product_price']?></td>
                         <td><div class="btn-group">
                                 <a class="btn btn-primary">Edit</a>
@@ -145,9 +152,14 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 </tbody>
             </table>
     </div>
+    </div>
 
 
-        <div class="col-md-9 col-lg-10 mt-2">
+
+
+        <div class="col-md-6 col-lg-6">
+            <h3>Manage Users</h3>
+
             <div>
                 <a class="btn btn-success d-block d-sm-inline-block"
                    id="btn-show-user-modal"
@@ -156,27 +168,32 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 </a>
             </div>
 
-            <table class="table" id="myTable">
+            <div class="table-responsive">
+            <table class="table" id="userTable">
                 <thead>
-                    <th>Product Image</th>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Product Price</th>
+                    <th>ID</th>
+                    <th>Firstname</th>
+                    <th>Middlename</th>
+                    <th>Lastname</th>
+                    <th>Address</th>
+                    <th>Username</th>
                     <th>Actions</th>
                 </thead>
                 <tbody>
                 <?php
 
-                $sql = "SELECT * FROM products";
+                $sql = "SELECT * FROM users WHERE level = 'customer'";
                 $result = mysqli_query($con, $sql);
                 if (mysqli_num_rows($result) > 0){
                 while($product = mysqli_fetch_assoc($result)){
                 ?>
                     <tr>
-                        <td><img width="50px" src="<?php echo $product['product_image']?>"></td>
                         <td><?php echo $product['id']?></td>
-                        <td><?php echo $product['product_name']?></td>
-                        <td><?php echo $product['product_price']?></td>
+                        <td><?php echo $product['firstname']?></td>
+                        <td><?php echo $product['middlename']?></td>
+                        <td><?php echo $product['lastname']?></td>
+                        <td><?php echo $product['address']?></td>
+                        <td><?php echo $product['username']?></td>
                         <td><div class="btn-group">
                                 <a class="btn btn-primary">Edit</a>
                                 <a class="btn btn-danger" href="delete-product.php?id=<?php echo $product['id']?>">Delete</a>
@@ -188,6 +205,7 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 ?>
                 </tbody>
             </table>
+    </div>
     </div>
 </div>
 
@@ -199,7 +217,7 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form enctype="multipart/form-data" action="admin.php" method="post">
+                <form enctype="multipart/form-data" action="index.php" method="post">
                 <div class="modal-body">
                         <div class="mb-3">
                             <label>Product Image</label>
@@ -208,6 +226,24 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                         <div class="mb-3">
                             <label>Product Name</label>
                             <input type="text" name="product_name" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label>Product Category</label>
+                           <select name="category" class="form-control">
+                               <option disabled selected>Select Product Category</option>
+                               <?php
+
+                               $sql = "SELECT * FROM category";
+                               $result = mysqli_query($con, $sql);
+                               while ($category = mysqli_fetch_array($result)){
+                               ?>
+                               <option value="<?php echo $category['category_id'] ?>">
+                                   <?php echo  $category['category_name'] ?>
+                               </option>
+                               <?php
+                               }
+                               ?>
+                           </select>
                         </div>
                         <div class="mb-3">
                             <label>Product Price</label>
@@ -226,6 +262,8 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
     <script>
     const dataTable = new simpleDatatables.DataTable("#myTable", {
+    })
+    const dt = new simpleDatatables.DataTable("#userTable", {
     })
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
