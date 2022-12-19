@@ -35,6 +35,32 @@ if (isset($_POST['addtocart'])){
 }
 
 
+if (isset($_POST['editProfile'])){
+
+    $id = $row['id'];
+    $firstname = $_POST['firstname'];
+    $middlename = $_POST['middlename'];
+    $lastname = $_POST['lastname'];
+    $address = $_POST['address'];
+    $password = $_POST['password'];
+
+    if ($password == ""){
+        // Dont change password
+        $newpassword = $row['password'];
+    } else {
+        $newpassword = md5($password);
+    }
+
+    $sql = "UPDATE users SET password = '$newpassword', firstname = '$firstname', middlename = '$middlename', lastname = '$lastname', address = '$address' WHERE id = '$id'";
+    $result = mysqli_query($con, $sql);
+
+    if ($result === TRUE){
+
+        header("Location: index.php?success=Profile edit success!");
+
+    }
+
+}
 
 ?>
 <!DOCTYPE html>
@@ -88,10 +114,16 @@ if (isset($_POST['addtocart'])){
             </ul>
 
             <div class="d-flex">
-                <button data-bs-toggle="modal" data-bs-target="#myCart" href="#" class="btn btn-outline-dark" type="button">
+
+                <button data-bs-toggle="modal" data-bs-target="#myCart" href="#" class="btn btn-outline btn-sm" type="button">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
                     <span class="badge bg-dark text-white ms-1 rounded-pill"><?php echo countCart($con, $row['id'])?></span>
+                </button>
+
+                <button data-bs-toggle="modal" data-bs-target="#myProfile" href="#" class="btn btn-outline-dark btn-sm" type="button">
+                    <i class="bi-person me-1"></i>
+                    Profile
                 </button>
 
             </div>
@@ -108,8 +140,22 @@ if (isset($_POST['addtocart'])){
     </div>
 </header>
 
+
+
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
+
+        <?php
+        if (isset($_GET['success'])){
+            $success = $_GET['success'];
+            ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Nice!</strong> <?= $success ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
+
+
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
             <?php
@@ -178,6 +224,7 @@ if (isset($_POST['addtocart'])){
             </div>
             <div class="modal-body">
 
+                <div class="table-responsive">
                 <table class="table">
                     <thead>
                     <th>Image</th>
@@ -227,6 +274,50 @@ if (isset($_POST['addtocart'])){
                         <td colspan="1" style="text-align: right">₱<?php echo number_format($total_price); ?></td>
                     </tr>
                 </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal-->
+<div class="modal fade" id="myProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">My Profile</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <button class="btn btn-primary mb-2" data-bs-target="#editProfile" data-bs-toggle="modal" type="button">Edit Profile</button>
+
+            <table class="table table-bordered">
+                <tr>
+                    <td>Firstname</td>
+                    <td><?php echo $row['firstname']; ?></td>
+                </tr>
+                <tr>
+                    <td>Middlename</td>
+                    <td><?php echo $row['middlename']; ?></td>
+                </tr>
+                <tr>
+                    <td>Lastname</td>
+                    <td><?php echo $row['lastname']; ?></td>
+                </tr>
+                <tr>
+                    <td>Username</td>
+                    <td><?php echo $row['username']; ?></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td><?php echo $row['address']; ?></td>
+                </tr>
+            </table>
 
             </div>
             <div class="modal-footer">
@@ -235,6 +326,62 @@ if (isset($_POST['addtocart'])){
         </div>
     </div>
 </div>
+
+<!-- Modal-->
+<div class="modal fade" id="editProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">My Profile</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" action="index.php">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Enter you firstname</label>
+                       <input type="text" class="form-control" name="firstname" value="<?php echo $row['firstname']; ?>">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Enter you middlename</label>
+                            <input type="text" class="form-control" name="middlename" value="<?php echo $row['middlename']; ?>">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Enter you lastname</label>
+                            <input type="text" class="form-control" name="lastname" value="<?php echo $row['lastname']; ?>">
+                        </div>
+                    </div>
+
+                        <div class="mb-3">
+                            <label>Enter you address</label>
+                            <input type="text" class="form-control" name="address" value="<?php echo $row['address']; ?>">
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Enter your new password</label>
+                            <input type="password" class="form-control" name="password" value="">
+                        </div>
+
+                    <div class="mb-3">
+                        <button type="submit" name="editProfile" class="btn btn-success">Save</button>
+                    </div>
+
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
 </body>
 </html>

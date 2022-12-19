@@ -4,32 +4,28 @@ include_once 'includes/connection.php';
 
     if (isset($_POST['submit'])){
 
+        $firstname = $_POST['firstname'];
+        $middlename = $_POST['middlename'];
+        $lastname = $_POST['lastname'];
+        $address = $_POST['address'];
         $username = $_POST['username'];
         $password = $_POST['password'];
         $repeat_password = $_POST['repeat_password'];
         $pass = md5($repeat_password);
 
-	if($username == ""){
-		header("Location: register.php?error=Please enter your username");
-return false;
-		}    
-    $sql = "INSERT INTO `users` (`username`, `password`) VALUES ('$username', '$pass')";
+	if(empty($firstname) || empty($middlename) || empty($lastname) || empty($address) || empty($username) || empty($password) || empty($repeat_password)){
+		header("Location: register.php?error=All fields are required");
+        return false;
+		}
+
+    $sql = "INSERT INTO `users` (`username`, `password`, `firstname`, `middlename`, `lastname`, `address`) VALUES ('$username', '$pass', '$firstname', '$middlename', '$lastname', '$address')";
         $stmt = mysqli_query($con, $sql);
         if ($stmt === true){
-
-            $id = mysqli_insert_id($con);
-
-            $sql = "INSERT INTO `user_details` (`user_id`) VALUES ('$id')";
-            $stmt = mysqli_query($con, $sql);
-            if ($stmt === true) {
                 // add success here
                 header("Location: index.php?success=You may now login");
             } else {
                 echo mysqli_error($con);
             }
-        }
-
-
     }
 
 ?>
@@ -53,12 +49,44 @@ return false;
                     <div class="card-body p-5">
                         <h1 class="fs-4 card-title fw-bold mb-4">Welcome to ShopOn-it</h1>
 
+                        <?php
+
+                        if (isset($_GET['error'])){
+                            $error = $_GET['error'];
+
+
+                        ?>
+
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                            <strong>Holy guacamole!</strong> <?php echo $error ?>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
 
+                        <?php
+                        }
+                        ?>
+
                         <form method="POST" action="register.php">
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="username">Enter your First Name</label>
+                                <input id="username" type="text" class="form-control" name="firstname" value="" required autofocus>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="username">Enter your Middle Name</label>
+                                <input id="username" type="text" class="form-control" name="middlename" value="" required autofocus>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="username">Enter your Last Name</label>
+                                <input id="username" type="text" class="form-control" name="lastname" value="" required autofocus>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="username">Enter your Address</label>
+                                <input id="username" type="text" class="form-control" name="address" value="" required autofocus>
+                            </div>
+
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="username">Create your username</label>
                                 <input id="username" type="text" class="form-control" name="username" value="" required autofocus>
