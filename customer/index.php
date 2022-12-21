@@ -262,6 +262,11 @@ if (isset($_POST['editProfile'])){
                             <?php
 
                         }
+                        ?>
+
+                        <a type="button" class="btn btn-success">Checkout</a>
+
+                        <?php
 
                     } else {
                         echo "<tr><td colspan='6'>Your cart is empty</td></tr>";

@@ -13,15 +13,33 @@ include_once 'includes/connection.php';
         $repeat_password = $_POST['repeat_password'];
         $pass = md5($repeat_password);
 
-	if(empty($firstname) || empty($middlename) || empty($lastname) || empty($address) || empty($username) || empty($password) || empty($repeat_password)){
-		header("Location: register.php?error=All fields are required");
-        return false;
-		}
+        if (empty($firstname)){
+            header("Location: register.php?error=Please enter your firstname!");
+        }
+        if (empty($middlename)){
+            header("Location: register.php?error=Please enter your middlename!");
+        }
+        if (empty($lastname)){
+            header("Location: register.php?error=Please enter your lastname!");
+        }
+        if (empty($address)){
+            header("Location: register.php?error=Please enter your address!");
+        }
+
+        if (empty($username)){
+            header("Location: register.php?error=Please enter your username!");
+        }
+
+        if (empty($password)){
+            header("Location: register.php?error=Please enter your password!");
+        }
+        if (empty($repeat_password)){
+            header("Location: register.php?error=Please repeat your password!");
+        }
 
     $sql = "INSERT INTO `users` (`username`, `password`, `firstname`, `middlename`, `lastname`, `address`) VALUES ('$username', '$pass', '$firstname', '$middlename', '$lastname', '$address')";
         $stmt = mysqli_query($con, $sql);
         if ($stmt === true){
-                // add success here
                 header("Location: index.php?success=You may now login");
             } else {
                 echo mysqli_error($con);
