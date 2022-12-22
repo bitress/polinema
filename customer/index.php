@@ -138,11 +138,19 @@ if (isset($_POST['editProfile'])){
             <div class="row">
                 <div class="col-md-12 pb-4">
                     <div class="d-flex">
-                        <select class="form-control">
+                        <select id="category_select" class="form-control">
                             <option selected disabled>--- Choose a Category ---</option>
-                            <option>Featured</option>
-                            <option>A to Z</option>
-                            <option>Item</option>
+                            <?php
+
+                            $sql = "SELECT * FROM category";
+                            $result = mysqli_query($con, $sql);
+                            while ($category = mysqli_fetch_assoc($result)){
+
+                            ?>
+                        <option value="category.php?id=<?php echo $category['category_id'] ?>&name=<?php echo $category['category_name'] ?>"><?php echo $category['category_name'] ?></option>
+                            <?php
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -206,6 +214,12 @@ if (isset($_POST['editProfile'])){
     ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script>
+    $('#category_select').change(function() {
+        window.location = $(this).val();
+    });
+</script>
 </body>
 </html>
 
