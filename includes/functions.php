@@ -7,3 +7,15 @@
         return $row['count'];
     }
 
+
+    function generateCategoryOptions($con){
+
+        $sql = "SELECT * FROM category";
+            $result = mysqli_query($con, $sql);
+            while ($category = mysqli_fetch_assoc($result)){
+
+             echo '<option value="'.$category['category_id'].'">'.$category['category_name'].'</option>'  ;
+
+            }
+
+    }

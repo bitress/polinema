@@ -93,20 +93,20 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 <div class="container pt-4">
     <div class="row">
 
-<!--        <div class="col-lg-2 col-md-3">-->
-<!--            <div class="list-group list-group-borderless">-->
-<!--                <a href="admin.php" class="list-group-item list-group-item-action ">-->
-<!--                    Manage Products-->
-<!--                </a>-->
-<!---->
-<!--                <a href="manage-customer.php" class="list-group-item list-group-item-action ">-->
-<!--                    Manage Customers-->
-<!--                </a>-->
-<!--            </div>-->
-<!--        </div>-->
+        <div class="col-lg-2 col-md-3">
+            <div class="list-group list-group-borderless">
+                <a href="index.php" class="list-group-item list-group-item-action active">
+                    Manage Products
+                </a>
+
+                <a href="manage-customer.php" class="list-group-item list-group-item-action ">
+                    Manage Customers
+                </a>
+            </div>
+        </div>
 
 
-        <div class="col-md-6 col-lg-6">
+        <div class="col-md-9 col-lg-10">
             <h3>Manage Products</h3>
 
             <div>
@@ -141,61 +141,9 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                         <td><?php echo $product['category_name']?></td>
                         <td><?php echo $product['product_price']?></td>
                         <td><div class="btn-group">
-                                <a class="btn btn-primary">Edit</a>
-                                <a class="btn btn-danger" href="delete-product.php?id=<?php echo $product['id']?>">Delete</a>
-                            </div></td>
-                    </tr>
-                <?php
-                 }
-                }
-                ?>
-                </tbody>
-            </table>
-    </div>
-    </div>
-
-
-
-
-        <div class="col-md-6 col-lg-6">
-            <h3>Manage Users</h3>
-
-            <div>
-                <a class="btn btn-success d-block d-sm-inline-block"
-                   id="btn-show-user-modal"
-                   data-bs-toggle="modal" data-bs-target="#addProduct">
-                    Add User
-                </a>
-            </div>
-
-            <div class="table-responsive">
-            <table class="table" id="userTable">
-                <thead>
-                    <th>ID</th>
-                    <th>Firstname</th>
-                    <th>Middlename</th>
-                    <th>Lastname</th>
-                    <th>Address</th>
-                    <th>Username</th>
-                    <th>Actions</th>
-                </thead>
-                <tbody>
-                <?php
-
-                $sql = "SELECT * FROM users WHERE level = 'customer'";
-                $result = mysqli_query($con, $sql);
-                if (mysqli_num_rows($result) > 0){
-                while($product = mysqli_fetch_assoc($result)){
-                ?>
-                    <tr>
-                        <td><?php echo $product['id']?></td>
-                        <td><?php echo $product['firstname']?></td>
-                        <td><?php echo $product['middlename']?></td>
-                        <td><?php echo $product['lastname']?></td>
-                        <td><?php echo $product['address']?></td>
-                        <td><?php echo $product['username']?></td>
-                        <td><div class="btn-group">
-                                <a class="btn btn-primary">Edit</a>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit_<?php echo $product['id']?>">
+                                    Edit
+                                </button>
                                 <a class="btn btn-danger" href="delete-product.php?id=<?php echo $product['id']?>">Delete</a>
                             </div></td>
                     </tr>
@@ -209,6 +157,55 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
     </div>
 </div>
 
+    <?php
+
+    $sql = "SELECT * FROM products LEFT JOIN category ON category.category_id = products.category";
+    $result = mysqli_query($con, $sql);
+    if (mysqli_num_rows($result) > 0){
+        while($product = mysqli_fetch_assoc($result)){
+            ?>
+            <div class="modal fade" id="edit_<?php echo $product['id']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label>Product Image</label>
+                                <input type="file" name="product_image" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Product Name</label>
+                                <input type="text" name="product_name" class="form-control" value="<?php echo $product['product_name']?>">
+                            </div>
+                            <div class="mb-3">
+                                <label>Product Category</label>
+                                <select name="category" class="form-control">
+                                    <option disabled selected>Select Product Category</option>
+                                <?php
+                                generateCategoryOptions($con);
+                                ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label>Product Price</label>
+                                <input type="number" name="product_price" value="<?php echo $product['product_price']?>" class="form-control">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php
+        }
+    }
+    ?>
 
     <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
