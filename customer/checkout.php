@@ -268,7 +268,7 @@ include_once '../includes/navbar.php';
                             </div>
                         </div>
                         <hr class="mb-4">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                        <a class="btn btn-primary btn-lg btn-block" type="button" href="delivery.php">Continue to checkout</a>
                     </form>
                 </div>
             </div>
