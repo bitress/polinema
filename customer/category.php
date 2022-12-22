@@ -55,50 +55,10 @@ if (isset($_POST['addtocart'])){
 </style>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="index.php">ShopOn-it</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="index.php">All Products</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <?php
 
-                        $sql = "SELECT * FROM category";
-                        $result = mysqli_query($con, $sql);
-                        while ($category = mysqli_fetch_assoc($result)){
-
-                            ?>
-                            <li><a class="dropdown-item" href="category.php?id=<?php echo $category['category_id']?>&name=<?php echo urlencode($category['category_name'])?>"><?php echo $category['category_name']?></a></li>
-                        <?php }
-                        ?>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="../logout.php">Logout</a>
-                </li>
-            </ul>
-
-            <div class="d-flex">
-                <button data-bs-toggle="modal" data-bs-target="#myCart" href="#" class="btn btn-outline-dark" type="button">
-                    <i class="bi-cart-fill me-1"></i>
-                    Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill"><?php echo countCart($con, $row['id'])?></span>
-                </button>
-
-            </div>
-        </div>
-    </div>
-</nav>
-
+<?php
+include_once '../includes/navbar.php';
+?>
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -175,75 +135,11 @@ if (isset($_POST['addtocart'])){
 </section>
 
 
+<?php
 
+include_once '../includes/modal.php';
 
-<!-- Modal-->
-<div class="modal fade" id="myCart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">My Cart</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                <table class="table">
-                    <thead>
-                    <th>Image</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Sub Total</th>
-                    <th>Actions</th>
-                    </thead>
-
-                    <?php
-
-                    $id = $row['id'];
-
-                    $total_price = 0;
-
-                    $sql = "SELECT * FROM cart INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = '$id'";
-                    $result = mysqli_query($con, $sql);
-                    if (mysqli_num_rows($result) > 0){
-                        while($cart = mysqli_fetch_assoc($result)){
-
-                            $total_price += $cart['product_price'] * $cart['quantity'];
-
-                            ?>
-
-                            <tr>
-                                <td>  <img width="100px" src="<?php echo WEBSITE_DOMAIN . $cart['product_image']?>"></td>
-                                <td><?php echo $cart['product_name']?></td>
-                                <td><?php echo $cart['quantity']?></td>
-                                <td>₱<?php echo number_format($cart['product_price'])?></td>
-                                <td>₱<?php echo number_format($cart['product_price'] * $cart['quantity']); ?></td>
-                                <td><a href="delete_cart.php?product_id=<?php echo $cart['product_id']; ?>&customer_id=<?php echo $cart['user_id'];?>" class="btn btn-sm btn-danger">Delete</a></td>
-                            </tr>
-
-                            <?php
-
-                        }
-
-                    } else {
-                        echo "<tr><td colspan='6'>Your cart is empty</td></tr>";
-                    }
-
-                    ?>
-
-                    <tr>
-                        <td colspan="5" style="text-align: right">Total Price:</td>
-                        <td colspan="1" style="text-align: right">₱<?php echo number_format($total_price); ?></td>
-                    </tr>
-                </table>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
 </body>
 </html>
