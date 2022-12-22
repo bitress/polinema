@@ -145,7 +145,39 @@ if (isset($_POST['editProfile'])){
     <div class="row">
 
         <div class="col-lg-3">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Your cart</span>
+                <span class="badge badge-secondary badge-pill">3</span>
+            </h4>
+            <ul class="list-group mb-3">
 
+                <?php
+                    $id = $row['id'];
+                $total_price = 0;
+
+                    $sql = "SELECT * FROM cart INNER JOIN products ON products.id = cart.product_id INNER JOIN users ON users.id = cart.user_id LEFT JOIN category ON category.category_id = products.category WHERE  users.id = '$id'";
+                    $result = mysqli_query($con, $sql);
+                    while ($cart = mysqli_fetch_array($result)){
+                        $total_price += $cart['product_price'] * $cart['quantity'];
+
+                        ?>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0"><?php echo $cart['product_name'] ?> (<?php echo $cart['quantity'] ?>)</h6>
+                                <small class="text-muted"><?php echo $cart['category_name'] ?></small>
+                            </div>
+                            <span class="text-muted">₱<?php echo number_format($cart['product_price'] * $cart['quantity']) ?></span>
+                        </li>
+                        <?php
+
+
+                }?>
+
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Total (PHP)</span>
+                    <strong>₱<?php echo number_format($total_price) ?></strong>
+                </li>
+            </ul>
         </div>
 
         <div class="col-lg-9">
@@ -153,6 +185,7 @@ if (isset($_POST['editProfile'])){
                 <div class="col-md-12 pb-4">
                     <div class="d-flex">
                         <select class="form-control">
+                            <option selected disabled>--- Choose a Category ---</option>
                             <option>Featured</option>
                             <option>A to Z</option>
                             <option>Item</option>
@@ -221,68 +254,81 @@ if (isset($_POST['editProfile'])){
                 <h1 class="modal-title fs-5" id="exampleModalLabel">My Cart</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <form action="checkout.php" method="post">
 
-                <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                    <th>Image</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Sub Total</th>
-                    <th>Actions</th>
-                    </thead>
+                <div class="modal-body">
 
-                    <?php
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <th>Select</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Sub Total</th>
+                            <th>Actions</th>
+                            </thead>
 
-                    $id = $row['id'];
+                            <?php
 
-                    $total_price = 0;
+                            $id = $row['id'];
 
-                    $sql = "SELECT * FROM cart INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = '$id'";
-                    $result = mysqli_query($con, $sql);
-                    if (mysqli_num_rows($result) > 0){
-                        while($cart = mysqli_fetch_assoc($result)){
+                            $total_price = 0;
 
-                            $total_price += $cart['product_price'] * $cart['quantity'];
+                            $sql = "SELECT * FROM cart INNER JOIN products ON products.id = cart.product_id WHERE cart.user_id = '$id'";
+                            $result = mysqli_query($con, $sql);
+                            $count = 0;
+                            if (mysqli_num_rows($result) > 0){
+                                while($cart = mysqli_fetch_assoc($result)){
+                                    $count += 1;
+
+                                    $total_price += $cart['product_price'] * $cart['quantity'];
+
+                                    ?>
+
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" name="product[]" value="<?php echo $cart['product_id']; ?>" class="custom-control-input">
+                                            </div>
+                                        </td>
+                                        <td>  <img width="100px" src="<?php echo WEBSITE_DOMAIN . $cart['product_image']?>" alt=""></td>
+                                        <td><?php echo $cart['product_name']?></td>
+                                        <td><?php echo $cart['quantity']?></td>
+                                        <td>₱<?php echo number_format($cart['product_price'])?></td>
+                                        <td>₱<?php echo number_format($cart['product_price'] * $cart['quantity']); ?></td>
+                                        <td><a href="delete_cart.php?product_id=<?php echo $cart['product_id']; ?>&customer_id=<?php echo $cart['user_id'];?>" class="btn btn-sm btn-danger">Delete</a></td>
+                                    </tr>
+                                    <?php
+
+                                }
+
+
+                            } else {
+                                echo "<tr><td colspan='8'>Your cart is empty</td></tr>";
+                            }
 
                             ?>
 
                             <tr>
-                                <td>  <img width="100px" src="<?php echo WEBSITE_DOMAIN . $cart['product_image']?>"></td>
-                                <td><?php echo $cart['product_name']?></td>
-                                <td><?php echo $cart['quantity']?></td>
-                                <td>₱<?php echo number_format($cart['product_price'])?></td>
-                                <td>₱<?php echo number_format($cart['product_price'] * $cart['quantity']); ?></td>
-                                <td><a href="delete_cart.php?product_id=<?php echo $cart['product_id']; ?>&customer_id=<?php echo $cart['user_id'];?>" class="btn btn-sm btn-danger">Delete</a></td>
+                                <td colspan="5" style="text-align: right">Total Price:</td>
+                                <td colspan="1" style="text-align: right">₱<?php echo number_format($total_price); ?></td>
                             </tr>
-
-                            <?php
-
-                        }
-                        ?>
-
-                        <a type="button" class="btn btn-success">Checkout</a>
-
-                        <?php
-
-                    } else {
-                        echo "<tr><td colspan='6'>Your cart is empty</td></tr>";
-                    }
-
-                    ?>
-
-                    <tr>
-                        <td colspan="5" style="text-align: right">Total Price:</td>
-                        <td colspan="1" style="text-align: right">₱<?php echo number_format($total_price); ?></td>
-                    </tr>
-                </table>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+                <div class="modal-footer">
+                    <?php
+                    if ($count > 0){
+                        ?>
+                        <button type="submit" name="checkout" class="btn btn-success">Checkout</button>
+                        <?php
+                    }
+                    ?>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -389,3 +435,4 @@ if (isset($_POST['editProfile'])){
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
 </body>
 </html>
+

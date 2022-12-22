@@ -156,25 +156,25 @@ if (isset($_POST['editProfile'])){
 
                         <?php
                         if (isset($_POST['checkout'])) {
+                            $id = $row['id'];
                             $cart =  implode(',', $_POST['product']);
-                            $quantity = $_POST['quantity'];
-                            $sql = "select * from products INNER JOIN category ON category.category_id = products.category WHERE `id` IN ($cart)";
+
+                            $sql = "SELECT cart.product_id, cart.user_id, cart.quantity, products.*, category.* FROM cart INNER JOIN products ON products.id = cart.product_id INNER JOIN users ON users.id = cart.user_id LEFT JOIN category ON category.category_id = products.category WHERE cart.product_id IN ($cart) AND users.id = '$id'";
                             $result = mysqli_query($con, $sql);
                             $total_price1 = 0;
-                            foreach ($quantity as $c) {
                               while ($cart = mysqli_fetch_array($result)){
-                                    $total_price1 += $cart['product_price'] * $c;
+                                    $total_price1 += $cart['product_price'] * $cart['quantity'];
 
                                 ?>
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
                             <div>
-                                <h6 class="my-0"><?php echo $cart['product_name'] ?> (<?php echo $c ?>)</h6>
+                                <h6 class="my-0"><?php echo $cart['product_name'] ?> (<?php echo $cart['quantity'] ?>)</h6>
                                 <small class="text-muted"><?php echo $cart['category_name'] ?></small>
                             </div>
                             <span class="text-muted">₱<?php echo number_format($cart['product_price']) ?></span>
                         </li>
                         <?php
-                              }
+
                             }
                         }?>
 
