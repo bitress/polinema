@@ -134,6 +134,10 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 <a href="manage-orders.php" class="list-group-item list-group-item-action">
                     Manage Orders
                 </a>
+
+                <a href="manage-category.php" class="list-group-item list-group-item-action">
+                    Manage Category
+                </a>
             </div>
         </div>
 
