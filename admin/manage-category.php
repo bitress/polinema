@@ -103,8 +103,8 @@ if (isset($_POST['addProduct'])){
                         while($product = mysqli_fetch_assoc($result)){
                             ?>
                             <tr>
-                                <td><?php echo $product['id']?></td>
-                                <td><?php echo $product['firstname']?></td>
+                                <td><?php echo $product['category_id']?></td>
+                                <td><?php echo $product['category_name']?></td>
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary">Edit</button>
