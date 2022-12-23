@@ -99,11 +99,11 @@ if (isset($_POST['addProduct'])){
                     Manage Products
                 </a>
 
-                <a href="manage-customer.php" class="list-group-item list-group-item-action active">
+                <a href="manage-customer.php" class="list-group-item list-group-item-action">
                     Manage Customers
                 </a>
 
-                <a href="manage-orders.php" class="list-group-item list-group-item-action">
+                <a href="manage-orders.php" class="list-group-item list-group-item-action active">
                     Manage Orders
                 </a>
             </div>
@@ -111,24 +111,21 @@ if (isset($_POST['addProduct'])){
 
 
         <div class="col-md-9 col-lg-10">
-            <h3>Manage Users</h3>
+            <h3>Orders</h3>
 
 
             <div class="table-responsive">
                 <table class="table" id="myTable">
                     <thead>
-                    <th>ID</th>
-                    <th>Firstname</th>
-                    <th>Middlename</th>
-                    <th>Lastname</th>
-                    <th>Address</th>
-                    <th>Username</th>
-                    <th>Actions</th>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Total</th>
                     </thead>
                     <tbody>
                     <?php
 
-                    $sql = "SELECT * FROM users WHERE level = 'customer'";
+                    $sql = "SELECT * FROM `checkout` LEFT JOIN cart ON cart.cart_id = checkout.cart_id INNER JOIN products ON products.id = cart.product_id LEFT JOIN users ON users.id = cart.user_id";
                     $result = mysqli_query($con, $sql);
                     if (mysqli_num_rows($result) > 0){
                         while($product = mysqli_fetch_assoc($result)){
@@ -136,13 +133,8 @@ if (isset($_POST['addProduct'])){
                             <tr>
                                 <td><?php echo $product['id']?></td>
                                 <td><?php echo $product['firstname']?></td>
-                                <td><?php echo $product['middlename']?></td>
-                                <td><?php echo $product['lastname']?></td>
-                                <td><?php echo $product['address']?></td>
-                                <td><?php echo $product['username']?></td>
-                                <td><div class="btn-group">
-                                        <a class="btn btn-danger" href="delete-product.php?id=<?php echo $product['id']?>">Delete</a>
-                                    </div></td>
+                                <td><?php echo $product['product_name']?></td>
+                                <td><?php echo $product['quantity'] * $product['product_price']?></td>
                             </tr>
                             <?php
                         }
@@ -152,16 +144,16 @@ if (isset($_POST['addProduct'])){
                 </table>
             </div>
         </div>
-        </div>
     </div>
+</div>
 
 
 
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable", {
-        })
+<script>
+    const dataTable = new simpleDatatables.DataTable("#myTable", {
+    })
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
 </body>
 </html>

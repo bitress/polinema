@@ -8,13 +8,15 @@
     }
 
 
-    function generateCategoryOptions($con){
+    function generateCategoryOptions($con, $product){
 
         $sql = "SELECT * FROM category";
             $result = mysqli_query($con, $sql);
             while ($category = mysqli_fetch_assoc($result)){
 
-             echo '<option value="'.$category['category_id'].'">'.$category['category_name'].'</option>'  ;
+                $selected = $product == $category['category_id'] ? 'selected' : '';
+
+             echo '<option value="'.$category['category_id'].'" '. $selected .' >'.$category['category_name'].'</option>'  ;
 
             }
 

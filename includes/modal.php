@@ -43,7 +43,7 @@
                                     <tr>
                                         <td>
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="product[]" value="<?php echo $cart['product_id']; ?>" class="custom-control-input">
+                                                <input type="checkbox" name="product[]" value="<?php echo $cart['cart_id']; ?>" class="custom-control-input">
                                             </div>
                                         </td>
                                         <td>  <img width="100px" src="<?php echo WEBSITE_DOMAIN . $cart['product_image']?>" alt=""></td>

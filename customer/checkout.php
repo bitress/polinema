@@ -63,6 +63,22 @@ if (isset($_POST['editProfile'])){
 }
 
 
+if (isset($_POST['continue_checkout'])){
+
+    $user = $_POST['user'];
+    $product = $_POST['checkout_products'];
+
+    $product = explode(',', $product);
+
+        foreach ($product as $p){
+
+            $sql = "INSERT INTO checkout (`user_id`, `cart_id`) VALUES ('$user', '$p')";
+            $result = mysqli_query($con, $sql);
+        }
+
+        header("Location: delivery.php");
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -114,7 +130,7 @@ include_once '../includes/navbar.php';
                             $id = $row['id'];
                             $cart =  implode(',', $_POST['product']);
 
-                            $sql = "SELECT cart.product_id, cart.user_id, cart.quantity, products.*, category.* FROM cart INNER JOIN products ON products.id = cart.product_id INNER JOIN users ON users.id = cart.user_id LEFT JOIN category ON category.category_id = products.category WHERE cart.product_id IN ($cart) AND users.id = '$id'";
+                            $sql = "SELECT cart.product_id, cart.user_id, cart.quantity, products.*, category.* FROM cart INNER JOIN products ON products.id = cart.product_id INNER JOIN users ON users.id = cart.user_id LEFT JOIN category ON category.category_id = products.category WHERE cart.cart_id IN ($cart) AND users.id = '$id'";
                             $result = mysqli_query($con, $sql);
                             $total_price1 = 0;
                               while ($cart = mysqli_fetch_array($result)){
@@ -267,9 +283,21 @@ include_once '../includes/navbar.php';
                                 </div>
                             </div>
                         </div>
-                        <hr class="mb-4">
-                        <a class="btn btn-primary btn-lg btn-block" type="button" href="delivery.php">Continue to checkout</a>
                     </form>
+
+                    <hr class="mb-4">
+                        <form method="post" action="checkout.php">
+                       <?php
+
+                       if (isset($_POST['checkout'])) {
+                            ?>
+                               <input type="hidden" name="checkout_products" value="<?php echo implode(',', $_POST['product']);?>">
+                               <input type="hidden" name="user" value="<?php echo $row['id'] ?>">
+                            <button class="btn btn-primary btn-lg btn-block" name="continue_checkout" type="submit">Continue to checkout</button>
+                           <?php
+                             }
+                           ?>
+                        </form>
                 </div>
             </div>
 

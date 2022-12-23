@@ -50,6 +50,33 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
     }
 
+    if (isset($_POST['editProduct'])){
+
+        $product_name = $_POST['product_name'];
+        $product_id = $_POST['product_id'];
+        $product_price = $_POST['product_price'];
+        $category = $_POST['category'];
+
+        if(isset($_FILES['product_image'])){
+            $file_name = $_FILES['product_image']['name'];
+            $file_tmp = $_FILES['product_image']['tmp_name'];
+            // Get file extension
+            $array = explode('.', $_FILES['product_image']['name']);
+            $product_image = "products/" . $file_name;
+            move_uploaded_file($file_tmp, "../products/" . $file_name);
+
+
+        } else {
+            $product_image = $_POST['product_image_orig'];
+        }
+
+        $sql = "UPDATE products SET product_name = '$product_name', product_price = '$product_price', category = '$category', product_image = '$product_image' WHERE id = '$product_id'";
+        mysqli_query($con, $sql);
+        header("Location: index.php");
+
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,6 +128,11 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
                 <a href="manage-customer.php" class="list-group-item list-group-item-action ">
                     Manage Customers
+                </a>
+
+
+                <a href="manage-orders.php" class="list-group-item list-group-item-action">
+                    Manage Orders
                 </a>
             </div>
         </div>
@@ -168,9 +200,12 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <form enctype="multipart/form-data"  method="post" action="index.php">
+                            <input type="hidden" name="product_id" value="<?php echo $product['id']?>">
+                            <input type="hidden" name="product_image_orig" value="<?php echo $product['product_image']?>">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label>Product Image</label>
@@ -184,9 +219,9 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                                 <label>Product Category</label>
                                 <select name="category" class="form-control">
                                     <option disabled selected>Select Product Category</option>
-                                <?php
-                                generateCategoryOptions($con);
-                                ?>
+                                        <?php
+                                        generateCategoryOptions($con, $product['category']);
+                                        ?>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -196,8 +231,9 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="submit" name="editProduct" class="btn btn-primary">Save changes</button>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
