@@ -124,6 +124,7 @@ if (isset($_POST['addProduct'])){
                     <th>Order ID</th>
                     <th>Customer</th>
                     <th>Product</th>
+                    <th>Datetime</th>
                     <th>Total</th>
                     </thead>
                     <tbody>
@@ -138,6 +139,7 @@ if (isset($_POST['addProduct'])){
                                 <td><?php echo $product['id']?></td>
                                 <td><?php echo $product['firstname']?></td>
                                 <td><?php echo $product['product_name']?></td>
+                                <td><?php echo $product['datetime']?></td>
                                 <td><?php echo $product['quantity'] * $product['product_price']?></td>
                             </tr>
                             <?php
