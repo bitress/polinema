@@ -106,6 +106,10 @@ if (isset($_POST['addProduct'])){
                 <a href="manage-orders.php" class="list-group-item list-group-item-action active">
                     Manage Orders
                 </a>
+
+                <a href="manage-category.php" class="list-group-item list-group-item-action">
+                    Manage Category
+                </a>
             </div>
         </div>
 

@@ -16,37 +16,6 @@ if (isset($_SESSION['isLoggedIn']) && isset($_SESSION['admin'])){
 
 if (isset($_POST['addProduct'])){
 
-    $product_name = $_POST['product_name'];
-    $product_price = $_POST['product_price'];
-    $category = $_POST['category'];
-
-    if(isset($_FILES['product_image'])){
-        $error = "";
-        $file_name = $_FILES['product_image']['name'];
-        $file_tmp = $_FILES['product_image']['tmp_name'];
-
-        // Get file extension
-        $array = explode('.', $_FILES['product_image']['name']);
-        $file_ext=strtolower(end($array));
-
-        $extensions= array("jpeg","jpg","png","webp");
-
-        if(in_array($file_ext,$extensions)=== false){
-            $error ="Please choose a JPEG or PNG file.";
-        }
-
-        if($error == "") {
-            $product_image = "products/".$file_name;
-            move_uploaded_file($file_tmp, "../products/".$file_name);
-
-            $sql = "INSERT INTO products (product_name, product_price, category, product_image) VALUES ('$product_name', '$product_price', '$category', '$product_image')";
-            mysqli_query($con, $sql);
-            header("Location: index.php");
-
-        }else{
-            print_r($error);
-        }
-    }
 
 }
 
@@ -99,14 +68,15 @@ if (isset($_POST['addProduct'])){
                     Manage Products
                 </a>
 
-                <a href="manage-customer.php" class="list-group-item list-group-item-action active">
+                <a href="manage-customer.php" class="list-group-item list-group-item-action">
                     Manage Customers
                 </a>
 
-                <a href="manage-orders.php" class="list-group-item list-group-item-action">
+                <a href="manage-orders.php" class="list-group-item list-group-item-action active">
                     Manage Orders
                 </a>
-                <a href="manage-category.php" class="list-group-item list-group-item-action">
+
+                <a href="manage-category.php" class="list-group-item list-group-item-action active">
                     Manage Category
                 </a>
             </div>
@@ -114,24 +84,20 @@ if (isset($_POST['addProduct'])){
 
 
         <div class="col-md-9 col-lg-10">
-            <h3>Manage Users</h3>
+            <h3>Orders</h3>
 
 
             <div class="table-responsive">
                 <table class="table" id="myTable">
                     <thead>
-                    <th>ID</th>
-                    <th>Firstname</th>
-                    <th>Middlename</th>
-                    <th>Lastname</th>
-                    <th>Address</th>
-                    <th>Username</th>
+                    <th>Category ID</th>
+                    <th>Category Name</th>
                     <th>Actions</th>
                     </thead>
                     <tbody>
                     <?php
 
-                    $sql = "SELECT * FROM users WHERE level = 'customer'";
+                    $sql = "SELECT * FROM category";
                     $result = mysqli_query($con, $sql);
                     if (mysqli_num_rows($result) > 0){
                         while($product = mysqli_fetch_assoc($result)){
@@ -139,13 +105,13 @@ if (isset($_POST['addProduct'])){
                             <tr>
                                 <td><?php echo $product['id']?></td>
                                 <td><?php echo $product['firstname']?></td>
-                                <td><?php echo $product['middlename']?></td>
-                                <td><?php echo $product['lastname']?></td>
-                                <td><?php echo $product['address']?></td>
-                                <td><?php echo $product['username']?></td>
-                                <td><div class="btn-group">
-                                        <a class="btn btn-danger" href="delete-product.php?id=<?php echo $product['id']?>">Delete</a>
-                                    </div></td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary">Edit</button>
+                                        <button type="button" class="btn btn-danger">Delete</button>
+                                    </div>
+                                    
+                                </td>
                             </tr>
                             <?php
                         }
@@ -155,16 +121,16 @@ if (isset($_POST['addProduct'])){
                 </table>
             </div>
         </div>
-        </div>
     </div>
+</div>
 
 
 
-    <script>
-        const dataTable = new simpleDatatables.DataTable("#myTable", {
-        })
+<script>
+    const dataTable = new simpleDatatables.DataTable("#myTable", {
+    })
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script>
 </body>
 </html>
