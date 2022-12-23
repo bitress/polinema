@@ -72,7 +72,7 @@ if (isset($_POST['addProduct'])){
                     Manage Customers
                 </a>
 
-                <a href="manage-orders.php" class="list-group-item list-group-item-action active">
+                <a href="manage-orders.php" class="list-group-item list-group-item-action">
                     Manage Orders
                 </a>
 
