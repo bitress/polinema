@@ -16,8 +16,9 @@ if (isset($_SESSION['isLoggedIn'])){
 
 
 if (isset($_POST['addtocart'])){
-    $user_id = $row['id'];
 
+    // User id
+    $user_id = $row['id'];
     $product = $_POST['product_id'];
     $quantity = $_POST['quantity'];
 
@@ -190,7 +191,7 @@ if (isset($_POST['editProfile'])){
                                 <label>How many?</label>
                                 <input type="number" id="quantity" name="quantity" value="1" title="quantity" class="form-control">
                             </div>
-                            <input type="submit"  name="addtocart" id="addtocart" class="btn btn-outline-dark btn-sm addtocart" value="Add to Cart">
+                            <input type="submit" name="addtocart" id="addtocart" class="btn btn-outline-dark btn-sm addtocart" value="Add to Cart">
                         </div>
                         </form>
                     </div>
